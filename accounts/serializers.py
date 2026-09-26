@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, JobSeekerProfile, RecruiterProfile
 
 class userSerializer(serializers.ModelSerializer):
 
@@ -23,4 +23,12 @@ class userSerializer(serializers.ModelSerializer):
 
         return user
 
-    
+class JobSeekerProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JobSeekerProfile
+        fields = ['id','phone','location','bio']
+
+class RecruiterProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruiterProfile
+        fields = ['id','phone','designation']

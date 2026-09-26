@@ -1,13 +1,15 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate
+
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .serializers import userSerializer
-from .models import User
+from .serializers import userSerializer, JobSeekerProfileSerializer, RecruiterProfileSerializer
+from .models import User, JobSeekerProfile, RecruiterProfile
+from .permissions import IsJobSeeker, IsRecruiter
 
 
 class RegisterView(generics.CreateAPIView):
@@ -16,7 +18,7 @@ class RegisterView(generics.CreateAPIView):
     permission_classes = [AllowAny]
 
 class LoginView(APIView):
-    permission_classes = []
+    permission_classes = [AllowAny]
 
     def post(self, request):
         email = request.data.get('email')
@@ -53,7 +55,29 @@ class UserProfileView(APIView):
         return Response(
             {
                 "email" : user.email,
+                "role" : user.role,
                 "is_active" : user.is_active,
                 "message" : "You are successfully authenticated with JWT Token."
-            }, status=status.HTTP_200_OK
+            },
+            status=status.HTTP_200_OK
         )
+
+class JobSeekerProfileView(APIView):
+    permission_classes = [IsJobSeeker]
+
+    def get(self, request):
+        profile = getattr(request.user, 'job_seeker_profile', None)
+        if profile:
+            return Response(JobSeekerProfileSerializer(profile).data, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "Profile not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+class RecruiterProfileView(APIView):
+    permission_classes = [IsRecruiter]
+
+    def get(self, request):
+        profile = getattr(request.user, 'recruiter_profile', None)
+        if profile:
+            return Response(RecruiterProfileSerializer(profile).data, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "Profile not found"}, status=status.HTTP_404_NOT_FOUND)

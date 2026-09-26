@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User
+from .models import User, JobSeekerProfile, RecruiterProfile
 from .forms import CustomUserChangeForm, CustomUserCreationForm
 
 @admin.register(User)
@@ -26,3 +26,12 @@ class CustomUserAdmin(UserAdmin):
             'fields' : ('email','role','password1', 'password2')
         }),
     )
+
+@admin.register(JobSeekerProfile)
+class JobSeekerAdmin(admin.ModelAdmin):
+    list_display = ('phone', 'location', 'bio')
+
+@admin.register(RecruiterProfile)
+class RecruiterAdmin(admin.ModelAdmin):
+    list_display = ('phone', 'designation')
+
