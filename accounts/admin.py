@@ -29,9 +29,9 @@ class CustomUserAdmin(UserAdmin):
 
 @admin.register(JobSeekerProfile)
 class JobSeekerAdmin(admin.ModelAdmin):
-    list_display = ('phone', 'location', 'bio')
+    list_display = ('id','phone', 'location', 'bio')
 
 @admin.register(RecruiterProfile)
 class RecruiterAdmin(admin.ModelAdmin):
-    list_display = ('phone', 'designation')
+    list_display = ('id','phone', 'designation')
 
