@@ -1,7 +1,6 @@
 from django.db import models
 from accounts.models import RecruiterProfile
 
-# Create your models here.
 class Company(models.Model):
     recruiter = models.ForeignKey(RecruiterProfile, on_delete=models.CASCADE, related_name='companies')
 

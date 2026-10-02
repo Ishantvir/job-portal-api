@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from rest_framework.exceptions import PermissionDenied
 
 from .permissions import IsRecruiterAndOwnerOrReadOnly
 from .serializers import CompanySerializer
@@ -11,4 +12,7 @@ class CompanyView(viewsets.ModelViewSet):
     permission_classes = [IsRecruiterAndOwnerOrReadOnly]
 
     def perform_create(self, serializer):
-        serializer.save(recruiter = self.request.user.recruiter_profile)
+        recruiter_profile = getattr(self.request.user, "recruiter_profile", None)
+        if not recruiter_profile:
+            raise PermissionDenied("Your account is missing an active Recruiter Profile layout.")
+        serializer.save(recruiter=recruiter_profile)
