@@ -21,8 +21,9 @@ class Job(models.Model):
     salary_max = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     experience_required = models.PositiveIntegerField(default=0, help_text="Required Experience in Years.")
 
-    is_active = models.BooleanField(default=True)
+    skills = models.ManyToManyField("skills.Skill", related_name="jobs", blank=True)
 
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import User, JobSeekerProfile, RecruiterProfile
+from skills.models import Skill
+from skills.serializers import SkillSerializer
 
 class userSerializer(serializers.ModelSerializer):
 
@@ -24,9 +26,12 @@ class userSerializer(serializers.ModelSerializer):
         return user
 
 class JobSeekerProfileSerializer(serializers.ModelSerializer):
+    skills_details = SkillSerializer(source="skills", many=True, read_only=True)
+    skills = serializers.PrimaryKeyRelatedField(queryset=Skill.objects.all(), many=True, write_only=True, required=False)
+    
     class Meta:
         model = JobSeekerProfile
-        fields = ['id','phone','location','bio']
+        fields = ['id','phone','location','skills','skills_details','bio']
 
 class RecruiterProfileSerializer(serializers.ModelSerializer):
     class Meta:

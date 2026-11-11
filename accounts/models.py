@@ -24,6 +24,8 @@ class JobSeekerProfile(models.Model):
     location = models.CharField(max_length=100, blank=True, null=True)
     bio = models.TextField(blank=True,null=True)
 
+    skills = models.ManyToManyField("skills.Skill", related_name='job_seeker', blank=True)
+
     def __str__(self):
         return f'Profile: {self.user.email}'
 

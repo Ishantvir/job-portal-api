@@ -1,10 +1,15 @@
 from rest_framework import serializers
 from .models import Job
+from skills.models import Skill
+from skills.serializers import SkillSerializer
 
 class JobSerializer(serializers.ModelSerializer):
+    skills_detail = SkillSerializer(source='skills', many=True, read_only=True)
+    skills = serializers.PrimaryKeyRelatedField(queryset = Skill.objects.all(), many=True, write_only=True, required=False)
+
     class Meta:
         model = Job 
-        fields = ["id", "company","title","description","location","job_type","salary_min","salary_max","experience_required","is_active","created_at","updated_at"]
+        fields = ["id", "company","title","description","location","job_type","salary_min","salary_max","experience_required","skills","skills_detail","is_active","created_at","updated_at"]
         read_only_fields = ['id','created_at','updated_at']
 
     def validate_title(self, value):
