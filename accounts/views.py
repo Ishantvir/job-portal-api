@@ -66,12 +66,24 @@ class JobSeekerProfileView(APIView):
     permission_classes = [IsJobSeeker]
 
     def get(self, request):
-        profile = getattr(request.user, 'job_seeker_profile', None)
+        profile = getattr(request.user, "job_seeker_profile", None)
         if profile:
-            return Response(JobSeekerProfileSerializer(profile).data, status=status.HTTP_200_OK)
+            return Response(JobSeekerProfileSerializer(profile).data,status=status.HTTP_200_OK,)
         else:
             return Response({"error": "Profile not found"}, status=status.HTTP_404_NOT_FOUND)
-        
+
+    def patch(self, request):
+        profile = getattr(request.user, "job_seeker_profile", None)
+        if not profile:
+            return Response({"error": "Profile not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = JobSeekerProfileSerializer(profile, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class RecruiterProfileView(APIView):
     permission_classes = [IsRecruiter]
 

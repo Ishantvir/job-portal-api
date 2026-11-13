@@ -31,7 +31,7 @@ class JobSeekerProfileSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = JobSeekerProfile
-        fields = ['id','phone','location','skills','skills_details','bio']
+        fields = ['id','phone','location', 'skills_details','skills','bio']
 
 class RecruiterProfileSerializer(serializers.ModelSerializer):
     class Meta:
