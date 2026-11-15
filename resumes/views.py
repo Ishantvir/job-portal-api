@@ -23,8 +23,6 @@ class ResumeView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
-        print("FILES:", request.FILES)
-        print("DATA:", request.data)
         profile = getattr(request.user, "job_seeker_profile", None)
         if not profile:
             return Response({'error':"Job Seeker profile not found"}, status=status.HTTP_404_NOT_FOUND,)
