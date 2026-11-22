@@ -32,3 +32,13 @@ class ApplicationSerializer(serializers.ModelSerializer):
             if Application.objects.filter(job_seeker=profile, job=job).exists():
                     raise serializers.ValidationError({'job':'You have already applied for this job.'})
         return attrs
+
+class RecruiterApplicationSerializer(serializers.ModelSerializer):
+    applicant_email = serializers.EmailField(source='job_seeker.user.email', read_only=True)
+    job_title = serializers.CharField(source = 'job.title', read_only=True)
+    company_name = serializers.CharField(source='job.company.name', read_only = True)
+
+    class Meta:
+        model = Application
+        fields = ["id", "applicant_email", "job", "job_title", "company_name", "cover_letter", "status", "applied_at","updated_at",]
+        read_only_fields = ["id", "applicant_email", "job", "job_title", "company_name", "cover_letter", "applied_at","updated_at",]
