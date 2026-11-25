@@ -25,3 +25,5 @@ class Application(models.Model):
 
     def __str__(self):
         return f'{self.job_seeker.user.email} -> {self.job.title} ({self.status})'
+
+

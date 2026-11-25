@@ -11,8 +11,6 @@ from .serializers import ApplicationSerializer, RecruiterApplicationSerializer
 class ApplicationViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin,viewsets.GenericViewSet):
 
     http_method_names = ['get', 'post', 'patch', 'head', 'options']
-    # serializer_class = ApplicationSerializer
-    # permission_classes = [IsJobSeeker]
     def get_permissions(self):
         if self.action == "create":
             return [IsJobSeeker()]
